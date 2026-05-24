@@ -1,0 +1,56 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+.venv
+
+# --- Data & Dataset ---
+# Abaikan dataset (csv, txt, json, parquet, xlsx, dll)
+*.csv
+dataset/nama/*.txt
+*.parquet
+*.json
+*.h5
+*.pkl
+*.feather
+data/raw/
+data/processed/
+data/interim/
+
+# --- Artefak Model & Checkpoint ---
+# Abaikan bobot model dan hasil pelatihan
+*.pt
+*.pth
+*.pb
+*.ckpt
+*.weights
+*.h5
+saved_models/
+models/
+checkpoints/
+
+# --- Log & TensorBoard ---
+# Abaikan log pelatihan
+mlruns/
+wandb/
+runs/
+tensorboard/
+*.log
+
+# --- Jupyter Notebook ---
+.ipynb_checkpoints
+*.ipynb
+
+# --- Lingkungan dan Sistem Operasi ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
