@@ -45,8 +45,12 @@ E5_QUERY_PREFIX = "query: "
 # ---------------------------------------------------------------------------
 @st.cache_resource(show_spinner="Memuat model Melagu...")
 def load_model() -> SentenceTransformer:
-    """Load the fine-tuned sentence-transformer model."""
-    return SentenceTransformer(MODEL_DIR)
+    """Load the fine-tuned sentence-transformer model, or fallback to base model."""
+    if os.path.exists(MODEL_DIR):
+        return SentenceTransformer(MODEL_DIR)
+    else:
+        st.warning("Model fine-tuned tidak ditemukan, menggunakan model base (intfloat/multilingual-e5-base).")
+        return SentenceTransformer("intfloat/multilingual-e5-base")
 
 
 @st.cache_data(show_spinner="Memuat database lagu...")
@@ -176,6 +180,7 @@ def main():
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             height: 100%;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 1.5rem;
         }
         .song-card:hover {
             transform: translateY(-4px);
@@ -268,7 +273,7 @@ def main():
     songs_metadata = load_songs_metadata()
 
     # --- Header ---
-    st.markdown('<div class="hero-title">🎵 Melagu</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-title">Melagu</div>', unsafe_allow_html=True)
     st.markdown(
         '<div class="hero-subtitle">Ceritakan perasaanmu, kami carikan lagunya.</div>',
         unsafe_allow_html=True,
@@ -298,7 +303,7 @@ def main():
     # --- Input area ---
     st.markdown("---")
     user_input = st.text_area(
-        "💬 Tulis pesan atau ceritakan perasaanmu:",
+        "Tulis pesan atau ceritakan perasaanmu:",
         placeholder="Contoh: Aku kangen banget sama dia, rasanya pengen balik lagi ke masa-masa dulu waktu kita masih bareng...",
         height=120,
         key="message_input",
@@ -307,7 +312,7 @@ def main():
     col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 1])
     with col_btn2:
         search_clicked = st.button(
-            "🔍 Cari Lagu",
+            "Cari Lagu",
             use_container_width=True,
             type="primary",
         )
@@ -326,7 +331,7 @@ def main():
 
         if results:
             st.markdown("---")
-            st.markdown("### 🎶 Rekomendasi Lagu Untukmu")
+            st.markdown("### Rekomendasi Lagu Untukmu")
 
             # Render as a 5x2 grid
             for row_start in range(0, len(results), 5):
@@ -357,9 +362,13 @@ def main():
     st.markdown("---")
     st.markdown(
         """
-        <div style="text-align: center; color: #6b7280; font-size: 0.8rem; padding: 1rem 0;">
+        <div style="text-align: center; color: #6b7280; font-size: 0.8rem; padding: 1rem 0; line-height: 1.6;">
             Melagu — Dibangun dengan Sentence-Transformers & multilingual-e5-base<br>
-            Dataset: 321.291 pesan dari SendTheSong
+            Dataset: 321.291 pesan dari <a href="https://sendthesong.xyz" target="_blank" style="color: #667eea; text-decoration: none;">sendthesong.xyz</a><br>
+            <br>
+            Developed by <strong>Muhamad Dekhsa Afnan</strong><br>
+            <a href="https://github.com/Dekhsa" target="_blank" style="color: #667eea; text-decoration: none; margin-right: 10px;">GitHub</a> | 
+            <a href="https://www.linkedin.com/in/dekhsaafnan/" target="_blank" style="color: #667eea; text-decoration: none; margin-left: 10px;">LinkedIn</a>
         </div>
         """,
         unsafe_allow_html=True,

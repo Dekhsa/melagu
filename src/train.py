@@ -21,6 +21,7 @@ import csv
 import gc
 import logging
 import os
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 import pickle
 import sys
 import time
